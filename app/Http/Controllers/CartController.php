@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\DTO\ProductDTO;
 use App\Http\Requests\StoreProductRequest;
-use App\Http\Resources\CartResource;
+use App\Http\Resources\CartDetailsCollectionResource;
 use App\Http\Services\CartService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,8 +23,7 @@ class CartController extends Controller
         $user = auth()->user();
         $cart = $this->cartService->getCartDetails($user);
 
-        return response()->json($cart, Response::HTTP_OK, [], JSON_UNESCAPED_UNICODE);
-//        return (new CartResource::collection($cart));
+        return (new CartDetailsCollectionResource($cart))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     public function store(StoreProductRequest $request): JsonResponse
@@ -38,8 +37,7 @@ class CartController extends Controller
         $this->cartService->addProductToCart($productDTO, $user);
         $cart = $this->cartService->getCartDetails($user);
 
-//        return response()->json($cart, Response::HTTP_CREATED, [], JSON_UNESCAPED_UNICODE);
-        return (new CartResource($cart))->response()->setStatusCode(Response::HTTP_CREATED);
+        return (new CartDetailsCollectionResource($cart))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function delete(string $id): JsonResponse

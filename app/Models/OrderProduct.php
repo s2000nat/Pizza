@@ -13,18 +13,18 @@ class OrderProduct extends Model
     protected $table = 'orders_products';
 
     protected $fillable = [
-        'orders_id',
-        'products_id',
+        'order_id',
+        'product_id',
         'quantity',
     ];
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, 'products_id');
+        return $this->belongsTo(Product::class);
     }
 
     public function order(): BelongsTo
     {
-        return $this->belongsTo(Order::class, 'orders_id');
+        return $this->belongsTo(Order::class);
     }
 }

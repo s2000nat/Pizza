@@ -10,6 +10,7 @@ use App\Models\CategorySizePrice;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 
 class CartService
@@ -41,7 +42,7 @@ class CartService
         return $user->id === $cart->user->id;
     }
 
-    public function addProductToCart(ProductDTO $product, User $user): \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+    public function addProductToCart(ProductDTO $product, User $user): Model
     {
         $category = CategorySizePrice::query()->find($product->categorySizePriceId);
         if (!$this->checkCartLimit($user, $category->price_category_id)) {
@@ -87,17 +88,5 @@ class CartService
     public function getCartDetails(User $user): Collection
     {
         return $user->carts()->with(['product.menuItem', 'product.categorySizePrice', 'product.categorySizePrice.size'])->get();
-
-        return ['cart_items' => $cart->map(function (Cart $cartItem) {
-            return [
-                'id' => $cartItem->product->id,
-                'product_name' => $cartItem->product->menuItem->name,
-                'product_size' => $cartItem->product->categorySizePrice->size->slug,
-                'price' => $cartItem->product->categorySizePrice->price,
-                'quantity' => $cartItem->quantity,
-            ];
-        }), 'total_price' => $cart->sum(function (Cart $cartItem) {
-            return $cartItem->product->categorySizePrice->price * $cartItem->quantity;
-        })];
     }
 }

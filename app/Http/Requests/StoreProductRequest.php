@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\PriceCategoryMatch;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProductRequest extends FormRequest

@@ -2,19 +2,33 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CartDetailsCollectionResource extends JsonResource
+class CartDetailsCollectionResource extends ResourceCollection
 {
+
+    /**
+     * The resource collection's response.
+     *
+     * @var string
+     */
+    public static string $responseType = 'cart';
+
     public function toArray($request): array
     {
         return [
-            'id' => $this->product->id,
-            'product_name' => $this->product->menuItem->name,
-            'product_size' => $this->product->categorySizePrice->size->slug,
-            'price' => $this->product->categorySizePrice->price,
-            'quantity' => $this->quantity,
+            'products' => $this->collection->map(function ($cartItem) {
+                return [
+                    'id' => $cartItem->product->id,
+                    'product_name' => $cartItem->product->menuItem->name,
+                    'product_size' => $cartItem->product->categorySizePrice->size->slug,
+                    'price' => $cartItem->product->categorySizePrice->price,
+                    'quantity' => $cartItem->quantity,
+                ];
+            }),
+            'total_price' => $this->collection->sum(function ($cartItem) {
+                return $cartItem->product->categorySizePrice->price * $cartItem->quantity;
+            }),
         ];
     }
 }
