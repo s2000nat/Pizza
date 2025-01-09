@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Services;
 
+use App\Exceptions\CartLimitException;
+use App\Exceptions\WrongPriceCategoryException;
 use App\Http\DTO\ProductDTO;
 use App\Models\Cart;
 use App\Models\CategorySizePrice;
+use App\Models\MenuItem;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -42,11 +45,15 @@ class CartService
         return $user->id === $cart->user->id;
     }
 
-    public function addProductToCart(ProductDTO $product, User $user): Model
+    /**
+     * @throws WrongPriceCategoryException
+     * @throws CartLimitException
+     */
+    public function addProductToCart(ProductDTO $product, User $user): void
     {
         $category = CategorySizePrice::query()->find($product->categorySizePriceId);
         if (!$this->checkCartLimit($user, $category->price_category_id)) {
-            throw new \Exception('Достигнут лимит корзины для данной категории.');
+            throw new CartLimitException('Достигнут лимит корзины для данной категории.');
         }
 
         $cart = $user->carts()->with(['product'])->get();
@@ -55,9 +62,13 @@ class CartService
                 && $cartItem->product->category_size_price_id === $product->categorySizePriceId) {
                 $cartItem->quantity += 1;
                 $cartItem->save();
-
-                return $cartItem;
+                return;
             }
+        }
+        $existingMenuItem = MenuItem::query()->find($product->menuItemId);
+        $existingCategory = CategorySizePrice::query()->find($product->categorySizePriceId);
+        if ($existingMenuItem->priceCategory->id !== $existingCategory->priceCategory->id) {
+            throw new WrongPriceCategoryException('Цена не соответствует категории продукта.');
         }
         $cartItem = Product::query()->create(
             [
@@ -65,11 +76,11 @@ class CartService
                 'category_size_price_id' => $product->categorySizePriceId,
             ]
         );
-
-        return Cart::query()->create([
+        Cart::query()->create([
             'user_id' => $user->id,
             'product_id' => $cartItem->id,
         ]);
+
     }
 
 

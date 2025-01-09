@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategorySizePriceRequest;
 use App\Http\Requests\UpdateCategorySizePriceRequest;
 use App\Models\CategorySizePrice;

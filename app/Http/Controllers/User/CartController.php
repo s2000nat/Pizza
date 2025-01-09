@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Http\DTO\ProductDTO;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\CartDetailsCollectionResource;
@@ -34,10 +35,13 @@ class CartController extends Controller
             menuItemId: $request->validated()['menu_item_id'],
             categorySizePriceId: $request->validated()['category_size_price_id'],
         );
-        $this->cartService->addProductToCart($productDTO, $user);
-        $cart = $this->cartService->getCartDetails($user);
+        if ($user) {
+            $this->cartService->addProductToCart($productDTO, $user);
+            $cart = $this->cartService->getCartDetails($user);
 
-        return (new CartDetailsCollectionResource($cart))->response()->setStatusCode(Response::HTTP_CREATED);
+            return (new CartDetailsCollectionResource($cart))->response()->setStatusCode(Response::HTTP_CREATED);
+        }
+
     }
 
     public function delete(string $id): JsonResponse

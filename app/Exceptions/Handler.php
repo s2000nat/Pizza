@@ -26,32 +26,33 @@ class Handler extends ExceptionHandler
      */
     public function render($request, \Throwable $exception): Response
     {
-        if ($request->expectsJson()) {
-            $response = [
-                'error' => 'Что-то пошло не так.',
-                'message' => $exception->getMessage(),
-                'code' => $exception->getCode()
-            ];
+        $response = [
+            'error' => 'Что-то пошло не так.',
+            'message' => $exception->getMessage(),
+            'code' => $exception->getCode()
+        ];
 
-            $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR; // Коды HTTP от 400 до 500
+        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
 
-            if ($exception instanceof \Illuminate\Validation\ValidationException) {
-                $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-                $response['errors'] = $exception->errors();
-                $response['message'] = 'Ошибка валидации';
-            } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
-                $statusCode = Response::HTTP_NOT_FOUND;
-                $response['message'] = 'Ресурс не найден';
-            } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
-                $statusCode = $exception->getStatusCode();
-                $response['message'] = $exception->getMessage();
-            }
-
-            return response()->json($response, $statusCode);
+        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+            $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
+            $response['errors'] = $exception->errors();
+            $response['message'] = 'Ошибка валидации';
+        } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            $statusCode = Response::HTTP_NOT_FOUND;
+            $response['message'] = 'Ресурс не найден';
+        } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            $statusCode = $exception->getStatusCode();
+            $response['message'] = $exception->getMessage();
+        } elseif ($exception instanceof CartLimitException) {
+            $response['message'] = $exception->getMessage();
+            $statusCode = Response::HTTP_BAD_REQUEST;
+        } elseif ($exception instanceof WrongPriceCategoryException) {
+            $response['message'] = $exception->getMessage();
+            $statusCode = Response::HTTP_BAD_REQUEST;
         }
 
-        // Вызов родительского метода для обычных запросов
-        return parent::render($request, $exception);
+        return response()->json($response, $statusCode);
 
     }
 }

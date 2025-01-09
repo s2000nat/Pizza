@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Http\DTO\OrderDTO;
 use App\Http\Requests\CompleteOrderRequest;
 use App\Http\Resources\OrdersDetailsCollectionResource;
 use App\Http\Resources\PrepareOrderDetailsResource;
 use App\Http\Services\CartService;
 use App\Http\Services\OrderService;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class OrderController extends Controller
