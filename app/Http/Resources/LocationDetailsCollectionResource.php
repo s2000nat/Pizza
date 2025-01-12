@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 class LocationDetailsCollectionResource extends ResourceCollection
 {
 
-    public static string $responseType = 'location';
+//    public static string $responseType = 'location';
 
 
     public function toArray($request): array

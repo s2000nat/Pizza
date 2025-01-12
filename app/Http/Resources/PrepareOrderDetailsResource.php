@@ -14,7 +14,7 @@ class PrepareOrderDetailsResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'locations' => new LocationDetailsCollectionResource($this->locations),
+            'locations' => LocationResource::collection($this->locations),
             'products' => new CartDetailsCollectionResource($this->cart),
             'phone_number' => $this->user->phone_number,
         ];
