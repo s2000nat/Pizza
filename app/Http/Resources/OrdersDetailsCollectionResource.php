@@ -12,6 +12,7 @@ class OrdersDetailsCollectionResource extends ResourceCollection
     {
         return ['orders' => $this->collection->map(function ($order) {
             return [
+                'id' => $order->id,
                 'created_at' => $order->created_at->toDateTimeString(),
                 'status' => $order->status,
                 'products' => $order->orderProduct->map(function ($orderProduct) {
