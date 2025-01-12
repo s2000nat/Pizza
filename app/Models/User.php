@@ -67,14 +67,4 @@ class User extends Authenticatable
         return $this->hasMany(Location::class, 'user_id');
     }
 
-    public function totalCartPrice(): int
-    {
-        $total = 0;
-
-        foreach ($this->cartProducts as $cartProduct) {
-            $total += $cartProduct->categorySizePrice->price * $cartProduct->pivot->quantity;
-        }
-
-        return $total;
-    }
 }

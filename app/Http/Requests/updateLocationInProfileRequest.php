@@ -27,6 +27,7 @@ class updateLocationInProfileRequest extends FormRequest
             'house_number' => 'sometimes|required|string|max:50',
             'floor' => 'nullable|integer|min:0',
             'apartment' => 'nullable|integer|min:0',
+            'deleted' => 'sometimes|boolean',
         ];
     }
 

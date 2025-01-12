@@ -18,6 +18,7 @@ class Location extends Model
         'floor',
         'apartment',
         'user_id',
+        'deleted',
     ];
 
     public function user(): BelongsTo

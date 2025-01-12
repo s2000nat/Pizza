@@ -24,31 +24,33 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    public function render($request, \Throwable $exception): Response
+    public function render($request, \Throwable $e): Response
     {
         $response = [
-            'error' => 'Что-то пошло не так.',
-            'message' => $exception->getMessage(),
-            'code' => $exception->getCode()
+            'error' => 'Ooops! Looks like something went wrong.',
+            'message' => $e->getMessage(),
         ];
 
         $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
 
-        if ($exception instanceof \Illuminate\Validation\ValidationException) {
+        if ($e instanceof \Illuminate\Validation\ValidationException) {
             $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
-            $response['errors'] = $exception->errors();
-            $response['message'] = 'Ошибка валидации';
-        } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            $response['errors'] = $e->errors();
+            $response['message'] = 'Validation Error';
+        } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             $statusCode = Response::HTTP_NOT_FOUND;
-            $response['message'] = 'Ресурс не найден';
-        } elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
-            $statusCode = $exception->getStatusCode();
-            $response['message'] = $exception->getMessage();
-        } elseif ($exception instanceof CartLimitException) {
-            $response['message'] = $exception->getMessage();
+            $response['message'] = 'Not Found';
+        } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException || $e instanceof \Illuminate\Auth\Access\AuthorizationException) {
+            $statusCode = Response::HTTP_FORBIDDEN;
+            $response['message'] = 'Forbidden';
+        } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
+            $statusCode = $e->getStatusCode();
+            $response['message'] = $e->getMessage();
+        } elseif ($e instanceof CartLimitException) {
+            $response['message'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
-        } elseif ($exception instanceof WrongPriceCategoryException) {
-            $response['message'] = $exception->getMessage();
+        } elseif ($e instanceof WrongPriceCategoryException) {
+            $response['message'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
         }
 

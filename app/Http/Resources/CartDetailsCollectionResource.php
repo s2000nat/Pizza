@@ -6,8 +6,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CartDetailsCollectionResource extends ResourceCollection
 {
-//    public static string $responseType = 'cart';
-
     public function toArray($request): array
     {
         return [

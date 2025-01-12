@@ -24,7 +24,6 @@ class StoreProductRequest extends FormRequest
         return [
             'menu_item_id' => 'required|exists:menu_items,id',
             'category_size_price_id' => 'required|exists:category_size_prices,id',
-
         ];
     }
 

@@ -6,7 +6,9 @@ namespace App\Http\DTO;
 
 class ProductDTO
 {
-    public function __construct(public int $menuItemId, public int $categorySizePriceId)
+    public function __construct(
+        public int $menuItemId,
+        public int $categorySizePriceId)
     {
     }
 }

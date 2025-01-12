@@ -16,7 +16,7 @@ class OrderService
 
     public function createOrder(OrderDTO $order): Order
     {
-        $newOrder = Order::query()->create([
+        $newOrder = Order::create([
             'user_id' => $order->userId,
             'phone_number' => $order->phoneNumber,
             'location_id' => $order->locationId,

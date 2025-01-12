@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\User\Admin\AdminOrderController;
-use App\Http\Controllers\User\Admin\CategorySizePriceController;
-use App\Http\Controllers\User\Admin\LocationController;
-use App\Http\Controllers\User\Admin\MenuItemController;
-use App\Http\Controllers\User\Admin\ProductController;
-use App\Http\Controllers\User\Admin\SizeController;
-use App\Http\Controllers\User\Admin\UserController;
+use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\CategorySizePriceController;
+use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\MenuItemController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\User\AuthController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\OrderController;

@@ -7,8 +7,10 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\DTO\OrderDTO;
 use App\Http\Requests\CompleteOrderRequest;
+use App\Http\Resources\CartDetailsCollectionResource;
+use App\Http\Resources\LocationResource;
 use App\Http\Resources\OrdersDetailsCollectionResource;
-use App\Http\Resources\PrepareOrderDetailsResource;
+use App\Http\Resources\UserResource;
 use App\Http\Services\CartService;
 use App\Http\Services\OrderService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,14 +33,14 @@ class OrderController extends Controller
     {
         $user = auth()->user();
         $cart = $this->cartService->getCartDetails($user);
-        $locations = $user->locations;
+        $locations = $user->locations()->where('deleted', false)->get();
 
+        return response()->json([
+            'user' => new UserResource($user),
+            'locations' => LocationResource::collection($locations),
+            'cart' => new CartDetailsCollectionResource($cart),
 
-        return (new PrepareOrderDetailsResource([
-            'locations' => $locations,
-            'cart' => $cart,
-            'user' => $user,
-        ]))->response()->setStatusCode(Response::HTTP_CREATED);
+        ])->setStatusCode(Response::HTTP_CREATED);
     }
 
 
