@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CartDetailsCollectionResource extends ResourceCollection
+class CartCollectionResource extends ResourceCollection
 {
     public function toArray($request): array
     {

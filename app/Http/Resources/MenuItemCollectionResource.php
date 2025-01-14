@@ -3,17 +3,17 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class OrdersCollectionResource extends ResourceCollection
+class MenuItemCollectionResource extends ResourceCollection
 {
+    public $collects = MenuItemResource::class;
 
-    public $collects = OrderResource::class;
-
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
-            'orders' => $this->collection
+            'menuItems' => $this->collection,
         ];
     }
 
