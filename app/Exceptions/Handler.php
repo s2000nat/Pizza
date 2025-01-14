@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -36,13 +37,16 @@ class Handler extends ExceptionHandler
         if ($e instanceof \Illuminate\Validation\ValidationException) {
             $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
             $response['errors'] = $e->errors();
-            $response['message'] = 'Validation Error';
+
         } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
             $statusCode = Response::HTTP_NOT_FOUND;
             $response['message'] = 'Not Found';
         } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException || $e instanceof \Illuminate\Auth\Access\AuthorizationException) {
             $statusCode = Response::HTTP_FORBIDDEN;
             $response['message'] = 'Forbidden';
+        } elseif ($e instanceof InvalidArgumentException) {
+            $statusCode = Response::HTTP_FORBIDDEN;
+            $response['message'] = $e->getMessage();
         } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\HttpException) {
             $statusCode = $e->getStatusCode();
             $response['message'] = $e->getMessage();
