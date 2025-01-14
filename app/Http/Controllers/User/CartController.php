@@ -5,9 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\DTO\ProductDTO;
 use App\Http\Requests\StoreProductRequest;
-use App\Http\Resources\CartDetailsCollectionResource;
+use App\Http\Resources\CartCollectionResource;
 use App\Http\Services\CartService;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CartController extends Controller
@@ -24,7 +25,7 @@ class CartController extends Controller
         $user = auth()->user();
         $cart = $this->cartService->getCartDetails($user);
 
-        return (new CartDetailsCollectionResource($cart))->response()->setStatusCode(Response::HTTP_OK);
+        return (new CartCollectionResource($cart))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     public function store(StoreProductRequest $request): JsonResponse
@@ -39,7 +40,7 @@ class CartController extends Controller
         $this->cartService->addProductToCart($productDTO, $user);
         $cart = $this->cartService->getCartDetails($user);
 
-        return (new CartDetailsCollectionResource($cart))->response()->setStatusCode(Response::HTTP_CREATED);
+        return (new CartCollectionResource($cart))->response()->setStatusCode(Response::HTTP_CREATED);
 
     }
 
@@ -47,11 +48,7 @@ class CartController extends Controller
     {
         $user = auth()->user();
         if (!$this->cartService->deleteProductFromCart($id, $user)) {
-            return response()->json(
-                ['message' => 'Вы не имеете прав для удаления этой корзины.'],
-                Response::HTTP_FORBIDDEN,
-                [], JSON_UNESCAPED_UNICODE
-            );
+            throw new AccessDeniedException('No privilege to delete another cart product.');
         }
 
         return response()->json(

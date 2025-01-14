@@ -5,11 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Http\Resources\OrderResource;
+use App\Http\Resources\OrdersCollectionResource;
+use App\Http\Services\OrderService;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminOrderController extends Controller
 {
+    public function __construct(protected OrderService $orderService)
+    {
+    }
 
     /**
      * Получить список всех заказов.
@@ -18,8 +25,9 @@ class AdminOrderController extends Controller
      */
     public function index(): JsonResponse
     {
-        $orders = Order::with('user', 'location')->get();
-        return response()->json($orders);
+        $orders = $this->orderService->getAllOrdersDetails();
+
+        return (new OrdersCollectionResource($orders))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -31,7 +39,7 @@ class AdminOrderController extends Controller
     public function store(StoreOrderRequest $request): JsonResponse
     {
         $order = Order::query()->create($request->validated());
-        return response()->json($order, 201);
+        return (new OrderResource($order))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
@@ -42,8 +50,11 @@ class AdminOrderController extends Controller
      */
     public function show(string $id): JsonResponse
     {
-        $order = Order::with('user', 'location')->findOrFail($id);
-        return response()->json($order);
+        $order = Order::with([
+            'orderProduct.product.categorySizePrice',
+            'orderProduct.product.menuItem'
+        ])->findOrFail($id);
+        return (new OrderResource($order))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -57,7 +68,7 @@ class AdminOrderController extends Controller
     {
         $order = Order::query()->findOrFail($id);
         $order->update($request->validated());
-        return response()->json($order);
+        return (new OrderResource($order))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -70,6 +81,6 @@ class AdminOrderController extends Controller
     {
         $order = Order::query()->findOrFail($id);
         $order->delete();
-        return response()->json('Заказ успешно удален', 204);
+        return response()->json('Заказ успешно удален')->setStatusCode(Response::HTTP_OK);
     }
 }

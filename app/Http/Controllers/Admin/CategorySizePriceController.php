@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateCategorySizePriceRequest;
 use App\Models\CategorySizePrice;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CategorySizePriceController extends Controller
 {
@@ -29,7 +30,7 @@ class CategorySizePriceController extends Controller
             ];
         });
 
-        return response()->json($response);
+        return response()->json($response, Response::HTTP_OK);
     }
 
     /**
@@ -39,11 +40,10 @@ class CategorySizePriceController extends Controller
     {
         $categorySizePrice = CategorySizePrice::query()->create($request->validated());
 
-
         return response()->json([
             'message' => 'Record created successfully!',
             'data' => $categorySizePrice,
-        ], 201);
+        ]);
 
     }
 
@@ -80,17 +80,14 @@ class CategorySizePriceController extends Controller
     {
         $categorySizePrice = CategorySizePrice::query()->find($id);
         if (!$categorySizePrice) {
-            return response()->json([
-                'error' => 'Что-то пошло не так.',
-                'message' => 'Ресурс не найден.'
-            ], Response::HTTP_NOT_FOUND);
+           throw new NotFoundHttpException();
         }
 
         $categorySizePrice->delete();
 
         return response()->json([
             'message' => 'CategorySizePrice deleted successfully',
-        ]);
+        ], Response::HTTP_OK);
 
     }
 }

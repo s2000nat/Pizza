@@ -10,6 +10,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
@@ -21,7 +22,7 @@ class UserController extends Controller
     public function index(): JsonResponse
     {
         $users = User::all();
-        return response()->json($users);
+        return response()->json($users, Response::HTTP_OK);
     }
 
     /**
@@ -33,7 +34,7 @@ class UserController extends Controller
     public function show(int $id): JsonResponse
     {
         $user = User::query()->findOrFail($id);
-        return response()->json($user);
+        return response()->json($user, Response::HTTP_OK);
     }
 
     /**
@@ -49,7 +50,7 @@ class UserController extends Controller
 
         $user = User::query()->create($validatedData);
 
-        return response()->json($user);
+        return response()->json($user, Response::HTTP_CREATED);
     }
 
     /**
@@ -67,10 +68,9 @@ class UserController extends Controller
         if (isset($validatedData['password'])) {
             $validatedData['password'] = bcrypt($validatedData['password']);
         }
-
         $user->update($validatedData);
 
-        return response()->json($user);
+        return response()->json($user,Response::HTTP_OK);
     }
 
     /**
@@ -84,6 +84,6 @@ class UserController extends Controller
         $user = User::query()->findOrFail($id);
         $user->delete();
 
-        return response()->json("Пользователь успешно удален.", 204);
+        return response()->json("User successfully deleted",Response::HTTP_OK );
     }
 }

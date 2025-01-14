@@ -7,9 +7,9 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\DTO\OrderDTO;
 use App\Http\Requests\CompleteOrderRequest;
-use App\Http\Resources\CartDetailsCollectionResource;
+use App\Http\Resources\CartCollectionResource;
 use App\Http\Resources\LocationResource;
-use App\Http\Resources\OrdersDetailsCollectionResource;
+use App\Http\Resources\OrdersCollectionResource;
 use App\Http\Resources\UserResource;
 use App\Http\Services\CartService;
 use App\Http\Services\OrderService;
@@ -38,7 +38,7 @@ class OrderController extends Controller
         return response()->json([
             'user' => new UserResource($user),
             'locations' => LocationResource::collection($locations),
-            'cart' => new CartDetailsCollectionResource($cart),
+            'cart' => new CartCollectionResource($cart),
 
         ])->setStatusCode(Response::HTTP_CREATED);
     }
@@ -46,7 +46,6 @@ class OrderController extends Controller
 
     public function completeOrder(CompleteOrderRequest $request): JsonResponse
     {
-
         $user = $request->user();
         if ($this->cartService->getCartDetails($user)->isEmpty()) {
 
@@ -70,6 +69,6 @@ class OrderController extends Controller
         $user = auth()->user();
         $orders = $this->orderService->getOrdersDetails($user);
 
-        return (new OrdersDetailsCollectionResource($orders))->response()->setStatusCode(Response::HTTP_CREATED);
+        return (new OrdersCollectionResource($orders))->response()->setStatusCode(Response::HTTP_OK);
     }
 }

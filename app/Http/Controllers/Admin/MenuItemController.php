@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\DTO\MenuItemDTO;
 use App\Http\Requests\StoreMenuItemRequest;
 use App\Http\Requests\UpdateMenuItemRequest;
+use App\Http\Resources\MenuItemCollectionResource;
+use App\Http\Resources\MenuItemResource;
+use App\Http\Services\MenuItemService;
 use App\Models\MenuItem;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,23 +18,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MenuItemController extends Controller
 {
+
+    public function __construct(protected MenuItemService $menuItemService){}
     /**
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
     {
-        $menuItems = MenuItem::with(['priceCategory', 'categorySizePrices.size'])->get();
-        $response = $menuItems->map(function (MenuItem $menuItem) {
-            return [
-                'id' => $menuItem->id,
-                'name' => $menuItem->name,
-                'description' => $menuItem->description,
-                'price_category' => $menuItem->priceCategory->slug,
-                'prices_with_sizes' => $menuItem->getPricesWithSizes(),
-            ];
-        });
+        $menuItems = $this->menuItemService->getAllMenuItems();
 
-        return response()->json($response, 200);
+        return (new MenuItemCollectionResource($menuItems))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -38,28 +35,22 @@ class MenuItemController extends Controller
      */
     public function store(StoreMenuItemRequest $request): JsonResponse
     {
-        $menuItem = MenuItem::query()->create($request->validated());
 
-        return response()->json([
-            'message' => 'Record created successfully!',
-            'data' => $menuItem,
-        ], 201);
+        $menuItemDTO = new MenuItemDTO(
+            name:$request->validated()['name'],
+            description:$request->validated()['description'],
+            priceCategoryId: $request->validated()['price_category_id'],
+        );
+
+        $menuItem = $this->menuItemService->createMenuItem($menuItemDTO);
+        return (new MenuItemResource($menuItem))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id): JsonResponse
     {
-        $menuItem = MenuItem::with(['priceCategory', 'categorySizePrices.size'])->findOrFail($id);
+        $menuItem =  $this->menuItemService->getMenuItem($id);
 
-        return response()->json([
-            'id' => $menuItem->id,
-            'name' => $menuItem->name,
-            'description' => $menuItem->description,
-            'price_category' => $menuItem->priceCategory->slug,
-            'prices_with_sizes' => $menuItem->getPricesWithSizes(),
-        ], 200);
+        return (new MenuItemResource($menuItem))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -67,16 +58,13 @@ class MenuItemController extends Controller
      */
     public function update(UpdateMenuItemRequest $request, string $id): JsonResponse
     {
-        $menuItem = MenuItem::query()->findOrFail($id);
-        $menuItem->update($request->validated());
-
-        return response()->json([
-            'id' => $menuItem->id,
-            'name' => $menuItem->name,
-            'description' => $menuItem->description,
-            'price_category' => $menuItem->priceCategory->slug,
-            'prices_with_sizes' => $menuItem->getPricesWithSizes(),
-        ], 200);
+        $menuItemDTO = new MenuItemDTO(
+            name:$request->validated()['name'],
+            description:$request->validated()['description'],
+            priceCategoryId: $request->validated()['price_category_id'],
+        );
+        $menuItem = $this->menuItemService->updateMenuItem($id, $menuItemDTO);
+        return (new MenuItemResource($menuItem))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
@@ -84,15 +72,8 @@ class MenuItemController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
-        $menuItem = MenuItem::query()->find($id);
-        if (!$menuItem) {
-            return response()->json([
-                'error' => 'Что-то пошло не так.',
-                'message' => 'Ресурс не найден.'
-            ], Response::HTTP_NOT_FOUND);
-        }
-        $menuItem->delete();
+        $this->menuItemService->delete($id);
 
-        return response()->json(['message' => 'CategorySizePrice deleted successfully'], 204);
+        return response()->json(['message' => 'CategorySizePrice deleted successfully'], Response::HTTP_OK);
     }
 }

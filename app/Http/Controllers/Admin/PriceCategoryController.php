@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePriceCategoryRequest;
 use App\Models\PriceCategory;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class PriceCategoryController extends Controller
 {
@@ -18,7 +19,7 @@ class PriceCategoryController extends Controller
     {
         $priceCategories = PriceCategory::all();
 
-        return response()->json($priceCategories);
+        return response()->json($priceCategories, Response::HTTP_OK);
     }
 
     /**
@@ -26,9 +27,9 @@ class PriceCategoryController extends Controller
      */
     public function store(StorePriceCategoryRequest $request): JsonResponse
     {
-        $size = PriceCategory::query()->create(['slug' => $request->validated()['slug']]);
+        $priceCategory = PriceCategory::create(['slug' => $request->validated()['slug']]);
 
-        return response()->json($size);
+        return response()->json($priceCategory, Response::HTTP_CREATED);
     }
 
     /**
@@ -38,7 +39,7 @@ class PriceCategoryController extends Controller
     {
         $priceCategory = PriceCategory::query()->findOrFail($id);
 
-        return response()->json($priceCategory);
+        return response()->json($priceCategory, Response::HTTP_OK);
     }
 
     /**
@@ -49,7 +50,7 @@ class PriceCategoryController extends Controller
         $priceCategory = PriceCategory::query()->findOrFail($id);
         $priceCategory->update(['slug' => $request->validated()['slug']]);
 
-        return response()->json($priceCategory);
+        return response()->json($priceCategory, Response::HTTP_OK);
     }
 
     /**
@@ -60,6 +61,6 @@ class PriceCategoryController extends Controller
         $priceCategory = PriceCategory::query()->findOrFail($id);
         $priceCategory->delete();
 
-        return response()->json(['message' => 'Price Category deleted successfully']);
+        return response()->json(['message' => 'Price Category deleted successfully'],Response::HTTP_OK);
     }
 }
