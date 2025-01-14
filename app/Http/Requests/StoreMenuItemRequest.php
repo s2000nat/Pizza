@@ -23,7 +23,7 @@ class StoreMenuItemRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'sometimes|string|max:1000|min:10',
+            'description' => 'sometimes|string|max:1000',
             'price_category_id' => 'required|exists:price_categories,id',
         ];
     }
@@ -38,7 +38,6 @@ class StoreMenuItemRequest extends FormRequest
             'description.required' => 'Описание обязательно для заполнения.',
             'description.string' => 'Описание должно быть строкой.',
             'description.max' => 'Описание не должно превышать 1000 символов.',
-            'description.min' => 'Описание должно содержать не менее 10 символов.',
 
             'price_category_id.required' => 'Идентификатор категории цены обязателен для заполнения.',
             'price_category_id.exists' => 'Выбранная категория цены не существует.',

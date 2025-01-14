@@ -15,6 +15,7 @@ class Order extends Model
     protected $fillable=[
         'user_id',
         'phone_number',
+        'location_id',
     ];
 
     public function products(): belongsToMany
@@ -29,5 +30,10 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function location(): BelongsTo
+    {
+        return $this->belongsTo(Location::class);
     }
 }

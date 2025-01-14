@@ -16,10 +16,10 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->is_admin === true) {
+        if (auth()->check() && auth()->user()->is_admin) {
             return $next($request);
         }
-        return response()->json(['message' => 'Доступ запрещён.'], Response::HTTP_FORBIDDEN);
+        return response()->json(['message' => 'Only Admin access.'], Response::HTTP_FORBIDDEN);
     }
 
 }

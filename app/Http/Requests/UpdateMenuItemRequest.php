@@ -26,7 +26,7 @@ class UpdateMenuItemRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
-            'description' => 'sometimes|string|max:1000|min:10',
+            'description' => 'sometimes|string|max:1000',
             'price_category_id' => 'sometimes|exists:price_categories,id',
         ];
     }
@@ -41,7 +41,6 @@ class UpdateMenuItemRequest extends FormRequest
             'description.required' => 'Описание не обязательно для заполнения, но если оно указано, оно должно быть строкой и длиной от 10 до 1000 символов.',
             'description.string' => 'Описание должно быть строкой.',
             'description.max' => 'Описание не должно превышать 1000 символов.',
-            'description.min' => 'Описание должно содержать не менее 10 символов.',
 
             'price_category_id.sometimes' => 'Идентификатор категории цены является необязательным, но если он указан, он должен существовать в базе данных.',
             'price_category_id.exists' => 'Выбранная категория цены не существует.',

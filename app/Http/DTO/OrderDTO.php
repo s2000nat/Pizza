@@ -5,10 +5,10 @@ namespace App\Http\DTO;
 class OrderDTO
 {
     public function __construct(
-        public int    $userId,
-        public string $phoneNumber,
-        public int    $locationId,
-        public string $status)
+        public ?int    $userId = null,
+        public ?string $phoneNumber = null,
+        public ?int    $locationId = null,
+        public ?string $status = null)
     {
     }
 }
