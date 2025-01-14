@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CartDetailsCollectionResource extends ResourceCollection
@@ -22,5 +23,10 @@ class CartDetailsCollectionResource extends ResourceCollection
                 return $cartItem->product->categorySizePrice->price * $cartItem->quantity;
             }),
         ];
+    }
+
+    public function toResponse($request): JsonResponse
+    {
+        return response()->json($this->toArray($request));
     }
 }
