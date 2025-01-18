@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends Controller
 {
@@ -18,7 +19,7 @@ class ProductController extends Controller
     {
         $products = Product::all();
 
-        return response()->json($products);
+        return response()->json($products, Response::HTTP_OK);
     }
 
     /**
@@ -27,7 +28,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): JsonResponse
     {
         $product = Product::query()->create($request->validated());
-        return response()->json($product);
+        return response()->json($product, Response::HTTP_CREATED);
     }
 
     /**
@@ -37,7 +38,7 @@ class ProductController extends Controller
     {
         $product = Product::query()->findOrFail($id);
 
-        return response()->json($product);
+        return response()->json($product, Response::HTTP_OK);
     }
 
     /**
@@ -47,7 +48,7 @@ class ProductController extends Controller
     {
         $product = Product::query()->findOrFail($id);
         $product->update($request->validated());
-        return response()->json($product);
+        return response()->json($product, Response::HTTP_OK);
     }
 
     /**
@@ -57,6 +58,6 @@ class ProductController extends Controller
     {
         $product = Product::query()->findOrFail($id);
         $product->delete();
-        return response()->json('Product deleted successfully.');
+        return response()->json('Product deleted successfully.', Response::HTTP_OK);
     }
 }

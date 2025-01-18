@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\User;
 
+use App\Exceptions\EmptyCartException;
 use App\Http\Controllers\Controller;
 use App\Http\DTO\OrderDTO;
 use App\Http\Requests\CompleteOrderRequest;
@@ -40,16 +41,18 @@ class OrderController extends Controller
             'locations' => LocationResource::collection($locations),
             'cart' => new CartCollectionResource($cart),
 
-        ])->setStatusCode(Response::HTTP_CREATED);
+        ])->setStatusCode(Response::HTTP_OK);
     }
 
 
+    /**
+     * @throws EmptyCartException
+     */
     public function completeOrder(CompleteOrderRequest $request): JsonResponse
     {
         $user = $request->user();
         if ($this->cartService->getCartDetails($user)->isEmpty()) {
-
-            return response()->json(['message' => 'Cart is empty.'], Response::HTTP_NO_CONTENT, [], JSON_UNESCAPED_UNICODE);
+            throw new EmptyCartException('Your cart is empty.');
         }
         $orderDto = new OrderDTO(
             userId: $user->id,
@@ -61,7 +64,7 @@ class OrderController extends Controller
         $order = $this->orderService->createOrder($orderDto);
         $this->orderService->moveCartItemsToOrder($order, $user);
 
-        return response()->json(['message' => 'Order created successfully.'], Response::HTTP_OK, [], JSON_UNESCAPED_UNICODE);
+        return response()->json(['message' => 'Order created successfully.'], Response::HTTP_CREATED, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function getOwnOrders(): JsonResponse

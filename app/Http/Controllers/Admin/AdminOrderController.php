@@ -81,6 +81,6 @@ class AdminOrderController extends Controller
     {
         $order = Order::query()->findOrFail($id);
         $order->delete();
-        return response()->json('Заказ успешно удален')->setStatusCode(Response::HTTP_OK);
+        return response()->json('Order deleted.')->setStatusCode(Response::HTTP_OK);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use InvalidArgumentException;
@@ -37,8 +38,11 @@ class Handler extends ExceptionHandler
         if ($e instanceof \Illuminate\Validation\ValidationException) {
             $statusCode = Response::HTTP_UNPROCESSABLE_ENTITY;
             $response['errors'] = $e->errors();
-
-        } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+        }
+        if ($e instanceof \Illuminate\Auth\AuthenticationException) {
+            $statusCode = Response::HTTP_UNAUTHORIZED;
+            $response['message'] = 'Unauthenticated.';
+        } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException || $e instanceof ModelNotFoundException) {
             $statusCode = Response::HTTP_NOT_FOUND;
             $response['message'] = 'Not Found';
         } elseif ($e instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException || $e instanceof \Illuminate\Auth\Access\AuthorizationException) {
@@ -54,6 +58,9 @@ class Handler extends ExceptionHandler
             $response['message'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
         } elseif ($e instanceof WrongPriceCategoryException) {
+            $response['message'] = $e->getMessage();
+            $statusCode = Response::HTTP_BAD_REQUEST;
+        } elseif ($e instanceof EmptyCartException) {
             $response['message'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
         }

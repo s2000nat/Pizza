@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Models\CategorySizePrice;
 use App\Models\PriceCategory;
 use App\Models\Size;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class CategorySizePriceControllerTest extends TestCase
@@ -13,15 +15,14 @@ class CategorySizePriceControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_list_category_size_prices()
+    public function it_can_list_category_size_prices_for_admin(): void
     {
-        // Подготовка данных
         $categorySizePrice = CategorySizePrice::factory()->create();
+        $user = User::factory()->create();
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->get('/api/admin/category-size-prices');
 
-        // Запрос к маршруту index
-        $response = $this->get('/api/category-size-prices');
-
-        // Проверка ответа
         $response->assertOk()
             ->assertJsonFragment([
                 'id' => $categorySizePrice->id,
@@ -32,33 +33,61 @@ class CategorySizePriceControllerTest extends TestCase
     }
 
     /** @test */
+    public function it_returns_forbidden_error_if_user_is_not_admin()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $response = $this->get('/api/admin/category-size-prices');
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN)->assertJsonFragment([
+            'message' => 'Only Admin access.'
+        ]);
+    }
+
+
+    /** @test */
     public function it_can_store_category_size_price()
     {
         $size = Size::factory()->create();
         $priceCategory = PriceCategory::factory()->create();
         $data = [
-            'price_category_id' =>$priceCategory->id,
-            'size_id' =>  $size->id,
+            'price_category_id' => $priceCategory->id,
+            'size_id' => $size->id,
             'price' => 100,
         ];
-        $response = $this->post('/api/category-size-prices', $data);
+        $user = User::factory()->create();
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->post('/api/admin/category-size-prices', $data);
         $response->assertCreated()
             ->assertJson([
-                'message' => 'Record created successfully!',
+                'data' => $data
             ]);
         $this->assertDatabaseHas('category_size_prices', $data);
     }
 
     /** @test */
+    public function unauthorized_user_cannot_store_category_size_price()
+    {
+        $size = Size::factory()->create();
+        $priceCategory = PriceCategory::factory()->create();
+        $data = [
+            'price_category_id' => $priceCategory->id,
+            'size_id' => $size->id,
+            'price' => 100,
+        ];
+        $response = $this->post('/api/admin/category-size-prices', $data);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)->assertJsonFragment(['message' => 'Unauthenticated.']);
+    }
+
+    /** @test */
     public function it_can_show_category_size_price()
     {
-        // Подготовка данных
         $categorySizePrice = CategorySizePrice::factory()->create();
-
-        // Запрос к маршруту show
-        $response = $this->get('/api/category-size-prices/' . $categorySizePrice->id);
-
-        // Проверка ответа
+        $user = User::factory()->create();
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->get('/api/admin/category-size-prices/' . $categorySizePrice->id);
         $response->assertOk()
             ->assertJsonFragment([
                 'id' => $categorySizePrice->id,
@@ -71,26 +100,25 @@ class CategorySizePriceControllerTest extends TestCase
     /** @test */
     public function it_returns_not_found_when_showing_nonexistent_category_size_price()
     {
-        // Запрос к маршруту show с несуществующим ID
-        $response = $this->get('/api/category-size-prices/999');
+        $user = User::factory()->create();
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->get('/api/ad/category-size-prices/999');
 
-        // Проверка ответа
         $response->assertNotFound();
     }
 
     /** @test */
     public function it_can_update_category_size_price()
     {
-        // Подготовка данных
         $categorySizePrice = CategorySizePrice::factory()->create();
         $data = [
             'price' => 200,
         ];
-
-        // Запрос на обновление
-        $response = $this->put('/api/category-size-prices/' . $categorySizePrice->id, $data);
-
-        // Проверка ответа
+        $user = User::factory()->create();
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->put('/api/admin/category-size-prices/' . $categorySizePrice->id, $data);
         $response->assertOk();
         $this->assertDatabaseHas('category_size_prices', array_merge(['id' => $categorySizePrice->id], $data));
     }
@@ -98,7 +126,13 @@ class CategorySizePriceControllerTest extends TestCase
     /** @test */
     public function it_returns_not_found_when_updating_nonexistent_category_size_price()
     {
-        $response = $this->put('/api/category-size-prices/999', []);
+        $user = User::factory()->create();
+        $data = [
+            'price' => 200,
+        ];
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->put('/api/admin/category-size-prices/999', $data);
         $response->assertNotFound();
     }
 
@@ -106,8 +140,10 @@ class CategorySizePriceControllerTest extends TestCase
     public function it_can_delete_category_size_price()
     {
         $categorySizePrice = CategorySizePrice::factory()->create();
-
-        $response = $this->delete('/api/category-size-prices/' . $categorySizePrice->id);
+        $user = User::factory()->create();
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->delete('/api/admin/category-size-prices/' . $categorySizePrice->id);
 
         $response->assertOk();
         $this->assertModelMissing($categorySizePrice);
@@ -116,11 +152,14 @@ class CategorySizePriceControllerTest extends TestCase
     /** @test */
     public function it_returns_not_found_when_deleting_nonexistent_category_size_price()
     {
-        $response = $this->delete('/api/category-size-prices/999');
+        $user = User::factory()->create();
+        $user->update(['is_admin' => true]);
+        $this->actingAs($user);
+        $response = $this->delete('/api/admin/category-size-prices/999');
 
         $response->assertNotFound();
         $response->assertJson([
-            'error' => 'Что-то пошло не так.',
-            'message' => 'Ресурс не найден.']);
+            'error' => 'Ooops! Looks like something went wrong.',
+            'message' => 'Not Found']);
     }
 }

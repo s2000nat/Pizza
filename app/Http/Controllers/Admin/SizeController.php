@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreSizeRequest;
 use App\Models\Size;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class SizeController extends Controller
 {
@@ -18,7 +19,7 @@ class SizeController extends Controller
     {
         $sizes = Size::all();
 
-        return response()->json($sizes);
+        return response()->json($sizes, Response::HTTP_OK);
     }
 
     /**
@@ -28,7 +29,7 @@ class SizeController extends Controller
     {
         $size = Size::query()->create(['slug' => $request->validated()['slug']]);
 
-        return response()->json($size);
+        return response()->json($size, Response::HTTP_CREATED);
     }
 
     /**
@@ -38,7 +39,7 @@ class SizeController extends Controller
     {
         $size = Size::query()->findOrFail($id);
 
-        return response()->json($size);
+        return response()->json($size, Response::HTTP_OK);
 
     }
 
@@ -51,7 +52,7 @@ class SizeController extends Controller
         $size = Size::query()->findOrFail($id);
         $size->update(['slug' => $request->validated()['slug']]);
 
-        return response()->json($size);
+        return response()->json($size, Response::HTTP_OK);
 
     }
 
@@ -64,7 +65,7 @@ class SizeController extends Controller
         $size = Size::query()->findOrFail($id);
         $size->delete();
 
-        return response()->json(['message' => 'Size deleted successfully.'], 200);
+        return response()->json(['message' => 'Size deleted successfully.'], Response::HTTP_OK);
 
     }
 }

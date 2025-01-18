@@ -38,7 +38,7 @@ class MenuItemService
             $menuItem->description = $menuItemDTO->description;
         }
         if ($menuItemDTO->priceCategoryId !== null) {
-            $menuItem->price_category_id = $menuItemDTO->price_category_id;
+            $menuItem->price_category_id = $menuItemDTO->priceCategoryId;
         }
         $menuItem->save();
 

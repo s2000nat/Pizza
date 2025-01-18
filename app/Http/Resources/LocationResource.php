@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,5 +18,10 @@ class LocationResource extends JsonResource
             'floor' => $this->floor,
             'apartment' => $this->apartment,
         ];
+    }
+
+    public function toResponse($request): JsonResponse
+    {
+        return response()->json($this->toArray($request));
     }
 }

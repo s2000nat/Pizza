@@ -16,6 +16,7 @@ class Order extends Model
         'user_id',
         'phone_number',
         'location_id',
+        'status',
     ];
 
     public function products(): belongsToMany

@@ -27,7 +27,7 @@ class ProfileController extends Controller
         $locations = $user->locations()->where('deleted', false)->get();
 
         return response()->json([
-            'user' => New UserResource($user),
+            'user' => new UserResource($user),
             'locations' => LocationResource::collection($locations),
         ])->setStatusCode(Response::HTTP_OK);
 
@@ -47,18 +47,13 @@ class ProfileController extends Controller
             user_id: $user->id
         );
 
-        $newLocation = $this->locationService->createLocation($locationFromRequest);
-
-        return response()->json([
-                'message' => 'Location added.',
-                'location' => $newLocation]
-        );
+        $location = $this->locationService->createLocation($locationFromRequest);
+        return (new LocationResource($location))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
     public function updateAuthUserLocation(updateLocationInProfileRequest $request, int $id): JsonResponse
     {
         $user = Auth::user();
-
         $location = Location::query()->findOrFail($id);
 
         $this->authorize('update', $location);
@@ -70,7 +65,7 @@ class ProfileController extends Controller
             floor: $request->validated()['floor'],
             apartment: $request->validated()['apartment'],
             user_id: $user->id,
-            deleted: $request->validated()['deleted']
+            deleted: $request->validated()['deleted'] ?? false
         );
 
         $updatedLocation = $this->locationService->updateLocation($location, $locationFromRequest);

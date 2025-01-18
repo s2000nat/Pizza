@@ -19,7 +19,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('menu-items', [MenuItemController::class, 'index']);
 Route::get('menu-items/{id}', [MenuItemController::class, 'show']);
-Route::apiResource('admin/users', UserController::class);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/profile/location/{id}', [ProfileController::class, 'updateAuthUserLocation']);
 
     Route::middleware(AdminMiddleware::class)->group(function () {
+        Route::apiResource('admin/users', UserController::class);
         Route::apiResource('admin/sizes', SizeController::class);
         Route::apiResource('admin/price-categories', PriceCategoryController::class);
         Route::apiResource('admin/category-size-prices', CategorySizePriceController::class);

@@ -41,9 +41,8 @@ class CategorySizePriceController extends Controller
         $categorySizePrice = CategorySizePrice::query()->create($request->validated());
 
         return response()->json([
-            'message' => 'Record created successfully!',
             'data' => $categorySizePrice,
-        ]);
+        ], Response::HTTP_CREATED);
 
     }
 
@@ -59,7 +58,7 @@ class CategorySizePriceController extends Controller
             'size' => $categorySizePrice->size->slug,
             'price_category' => $categorySizePrice->priceCategory->slug,
             'price' => $categorySizePrice->price,
-        ]);
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -70,7 +69,7 @@ class CategorySizePriceController extends Controller
         $categorySizePrice = CategorySizePrice::query()->findOrFail($id);
         $categorySizePrice->update($request->validated());
 
-        return response()->json($categorySizePrice);
+        return response()->json($categorySizePrice, Response::HTTP_OK);
     }
 
     /**

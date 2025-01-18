@@ -75,6 +75,6 @@ class LocationController extends Controller
         $location = Location::query()->findOrFail($id);
         $location->delete();
 
-        return response()->json(['message' => 'Location deleted successfully'], Response::HTTP_NO_CONTENT);
+        return response()->json(['message' => 'Location deleted successfully'], Response::HTTP_OK);
     }
 }

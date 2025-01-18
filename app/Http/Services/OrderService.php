@@ -33,8 +33,6 @@ class OrderService
         ]);
 
 
-
-
         return $newOrder;
     }
 
@@ -45,7 +43,7 @@ class OrderService
             return;
         }
         foreach ($carts as $cart) {
-            $orderProduct = OrderProduct::query()->create([
+            OrderProduct::query()->create([
                 'product_id' => $cart->id,
                 'order_id' => $order->id,
                 'quantity' => $cart->pivot->quantity,
@@ -62,9 +60,9 @@ class OrderService
         ])->get();
     }
 
-    public function getAllOrdersDetails():Collection
+    public function getAllOrdersDetails(): Collection
     {
-        return Order::with([ 'orderProduct.product.categorySizePrice',
+        return Order::with(['orderProduct.product.categorySizePrice',
             'orderProduct.product.menuItem'
         ])->get();
     }

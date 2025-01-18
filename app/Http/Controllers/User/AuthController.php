@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
-    // Регистрация
     public function register(RegisterRequest $request): JsonResponse
     {
         $user = User::query()->create($request->validated());
@@ -22,7 +21,6 @@ class AuthController extends Controller
         return response()->json(['message' => "{$user['name']}, регистрация прошла успешно"], Response::HTTP_CREATED);
     }
 
-    // Авторизация
     public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->validated();
@@ -37,7 +35,7 @@ class AuthController extends Controller
         return response()->json(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
     }
 
-    // Выход пользователя
+
     public function logout(Request $request): JsonResponse
     {
         $user = auth()->user();
