@@ -39,12 +39,13 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         $locationFromRequest = new LocationDTO(
+            user_id: $user->id,
             city: $request->validated()['city'],
             street: $request->validated()['street'],
             house_number: $request->validated()['house_number'],
             floor: $request->validated()['floor'],
             apartment: $request->validated()['apartment'],
-            user_id: $user->id
+
         );
 
         $location = $this->locationService->createLocation($locationFromRequest);
@@ -59,12 +60,12 @@ class ProfileController extends Controller
         $this->authorize('update', $location);
 
         $locationFromRequest = new LocationDTO(
+            user_id: $user->id,
             city: $request->validated()['city'],
             street: $request->validated()['street'],
             house_number: $request->validated()['house_number'],
             floor: $request->validated()['floor'],
             apartment: $request->validated()['apartment'],
-            user_id: $user->id,
             deleted: $request->validated()['deleted'] ?? false
         );
 

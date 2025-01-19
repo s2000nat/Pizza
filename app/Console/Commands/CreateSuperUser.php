@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use App\Models\User;
@@ -25,7 +27,7 @@ class CreateSuperUser extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         {
             $name = $this->argument('name');
@@ -34,7 +36,7 @@ class CreateSuperUser extends Command
 
 
             try {
-                User::create([
+                User::query()->create([
                     'name' => $name,
                     'password' => $password,
                     'phone_number' => $phoneNumber,
@@ -48,7 +50,6 @@ class CreateSuperUser extends Command
                 }
                 throw $e;
             }
-
 
             $this->info("Superuser {$name} created!");
         }

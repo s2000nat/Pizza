@@ -47,7 +47,7 @@ class CartController extends Controller
     public function delete(string $id): JsonResponse
     {
         $user = auth()->user();
-        if (!$this->cartService->deleteProductFromCart($id, $user)) {
+        if (!$this->cartService->deleteProductFromCart((int)$id, $user)) {
             throw new AccessDeniedException('No privilege to delete another cart product.');
         }
 

@@ -27,7 +27,7 @@ class PriceCategoryController extends Controller
      */
     public function store(StorePriceCategoryRequest $request): JsonResponse
     {
-        $priceCategory = PriceCategory::create(['slug' => $request->validated()['slug']]);
+        $priceCategory = PriceCategory::query()->create(['slug' => $request->validated()['slug']]);
 
         return response()->json($priceCategory, Response::HTTP_CREATED);
     }
