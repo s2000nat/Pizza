@@ -12,7 +12,6 @@ class LocationDTO
         public ?int    $floor = null,
         public ?int    $apartment = null,
         public bool    $deleted = false,
-    )
-    {
+    ) {
     }
 }

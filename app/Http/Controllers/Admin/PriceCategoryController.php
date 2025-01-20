@@ -61,6 +61,6 @@ class PriceCategoryController extends Controller
         $priceCategory = PriceCategory::query()->findOrFail($id);
         $priceCategory->delete();
 
-        return response()->json(['message' => 'Price Category deleted successfully'],Response::HTTP_OK);
+        return response()->json(['message' => 'Price Category deleted successfully'], Response::HTTP_OK);
     }
 }

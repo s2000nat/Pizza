@@ -28,6 +28,9 @@ class StoreSizeRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function messages(): array
     {
         return [

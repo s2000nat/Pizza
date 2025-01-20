@@ -7,10 +7,10 @@ use App\Http\DTO\LocationDTO;
 use App\Http\Requests\addLocationInProfileRequest;
 use App\Http\Requests\updateLocationInProfileRequest;
 use App\Http\Resources\LocationResource;
-use App\Http\Resources\UserProfileResource;
 use App\Http\Resources\UserResource;
 use App\Http\Services\LocationService;
 use App\Models\Location;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,22 +21,36 @@ class ProfileController extends Controller
     {
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function getAuthUserProfile(): JsonResponse
     {
         $user = Auth::user();
+        if (!$user) {
+            throw new AuthorizationException();
+        }
         $locations = $user->locations()->where('deleted', false)->get();
 
-        return response()->json([
+        return response()->json(
+            [
             'user' => new UserResource($user),
             'locations' => LocationResource::collection($locations),
-        ])->setStatusCode(Response::HTTP_OK);
+            ]
+        )->setStatusCode(Response::HTTP_OK);
 
     }
 
 
+    /**
+     * @throws AuthorizationException
+     */
     public function addLocationInProfile(addLocationInProfileRequest $request): JsonResponse
     {
         $user = Auth::user();
+        if (!$user) {
+            throw new AuthorizationException();
+        }
 
         $locationFromRequest = new LocationDTO(
             user_id: $user->id,
@@ -45,16 +59,21 @@ class ProfileController extends Controller
             house_number: $request->validated()['house_number'],
             floor: $request->validated()['floor'],
             apartment: $request->validated()['apartment'],
-
         );
 
         $location = $this->locationService->createLocation($locationFromRequest);
         return (new LocationResource($location))->response()->setStatusCode(Response::HTTP_CREATED);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function updateAuthUserLocation(updateLocationInProfileRequest $request, int $id): JsonResponse
     {
         $user = Auth::user();
+        if (!$user) {
+            throw new AuthorizationException();
+        }
         $location = Location::query()->findOrFail($id);
 
         $this->authorize('update', $location);

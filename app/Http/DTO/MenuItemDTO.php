@@ -7,7 +7,7 @@ class MenuItemDTO
     public function __construct(
         public ?string $name = null,
         public ?string $description = null,
-        public ?int    $priceCategoryId = null)
-    {
+        public ?int    $priceCategoryId = null
+    ) {
     }
 }

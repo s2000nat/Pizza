@@ -8,7 +8,7 @@ class ProductDTO
 {
     public function __construct(
         public int $menuItemId,
-        public int $categorySizePriceId)
-    {
+        public int $categorySizePriceId
+    ) {
     }
 }

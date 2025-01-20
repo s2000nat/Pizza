@@ -20,15 +20,19 @@ class CartService
     {
         $cart = $user->cartProducts()->with(['categorySizePrice'])->get();
         if (in_array($categoryId, [1, 2, 3])) {
-            $countPizzas = $cart->filter(function (Product $product) {
-                return in_array($product->categorySizePrice->price_category_id, [1, 2, 3]);
-            })->count();
+            $countPizzas = $cart->filter(
+                function (Product $product) {
+                    return in_array($product->categorySizePrice->price_category_id, [1, 2, 3]);
+                }
+            )->count();
 
             return $countPizzas < 10;
         } elseif (in_array($categoryId, [4, 5, 6])) {
-            $countDrinks = $cart->filter(function (Product $product) {
-                return in_array($product->categorySizePrice->price_category_id, [4, 5, 6]);
-            })->count();
+            $countDrinks = $cart->filter(
+                function (Product $product) {
+                    return in_array($product->categorySizePrice->price_category_id, [4, 5, 6]);
+                }
+            )->count();
 
             return $countDrinks < 20;
         }
@@ -57,7 +61,8 @@ class CartService
         $cart = $user->carts()->with(['product'])->get();
         foreach ($cart as $cartItem) {
             if ($cartItem->product->menu_item_id === $product->menuItemId
-                && $cartItem->product->category_size_price_id === $product->categorySizePriceId) {
+                && $cartItem->product->category_size_price_id === $product->categorySizePriceId
+            ) {
                 $cartItem->quantity += 1;
                 $cartItem->save();
                 return;
@@ -74,10 +79,12 @@ class CartService
                 'category_size_price_id' => $product->categorySizePriceId,
             ]
         );
-        Cart::query()->create([
+        Cart::query()->create(
+            [
             'user_id' => $user->id,
             'product_id' => $cartItem->id,
-        ]);
+            ]
+        );
 
     }
 
@@ -94,6 +101,10 @@ class CartService
         return false;
     }
 
+    /**
+     * @param  User $user
+     * @return Collection<int, Cart>
+     */
     public function getCartDetails(User $user): Collection
     {
         return $user->carts()->with(['product.menuItem', 'product.categorySizePrice', 'product.categorySizePrice.size'])->get();

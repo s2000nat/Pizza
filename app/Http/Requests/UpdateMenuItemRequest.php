@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateMenuItemRequest extends FormRequest
@@ -14,13 +15,10 @@ class UpdateMenuItemRequest extends FormRequest
         return true;
     }
 
-    /**[
-     * 'name' => 'required|string|length:2,255',
-     * 'description' => 'required|text',
-     * 'price_category_id_FK' => 'required|exists:price_category,id',
+    /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<string, string>|string>
      */
     public function rules(): array
     {
@@ -31,6 +29,9 @@ class UpdateMenuItemRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function messages(): array
     {
         return [

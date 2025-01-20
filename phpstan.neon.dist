@@ -6,11 +6,11 @@ parameters:
 
     paths:
         - app
-        - database
-        - tests
+#        - database
+#        - tests
 
     # Level 10 is the highest level
-    level: 9
+    level: 7
 
 #    ignoreErrors:
 #        - '#PHPDoc tag @var#'

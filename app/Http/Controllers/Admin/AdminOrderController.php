@@ -33,7 +33,7 @@ class AdminOrderController extends Controller
     /**
      * Создать новый заказ.
      *
-     * @param StoreOrderRequest $request
+     * @param  StoreOrderRequest $request
      * @return JsonResponse
      */
     public function store(StoreOrderRequest $request): JsonResponse
@@ -45,23 +45,25 @@ class AdminOrderController extends Controller
     /**
      * Получить конкретный заказ по ID.
      *
-     * @param string $id
+     * @param  string $id
      * @return JsonResponse
      */
     public function show(string $id): JsonResponse
     {
-        $order = Order::with([
+        $order = Order::with(
+            [
             'orderProduct.product.categorySizePrice',
             'orderProduct.product.menuItem'
-        ])->findOrFail($id);
+            ]
+        )->findOrFail($id);
         return (new OrderResource($order))->response()->setStatusCode(Response::HTTP_OK);
     }
 
     /**
      * Обновить заказ по ID.
      *
-     * @param UpdateOrderRequest $request
-     * @param string $id
+     * @param  UpdateOrderRequest $request
+     * @param  string             $id
      * @return JsonResponse
      */
     public function update(UpdateOrderRequest $request, string $id): JsonResponse
@@ -74,7 +76,7 @@ class AdminOrderController extends Controller
     /**
      * Удалить заказ по ID.
      *
-     * @param string $id
+     * @param  string $id
      * @return JsonResponse
      */
     public function destroy(string $id): JsonResponse

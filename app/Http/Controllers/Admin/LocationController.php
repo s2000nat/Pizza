@@ -26,7 +26,7 @@ class LocationController extends Controller
     /**
      * Создать новую локацию.
      *
-     * @param StoreLocationRequest $request
+     * @param  StoreLocationRequest $request
      * @return JsonResponse
      */
     public function store(StoreLocationRequest $request): JsonResponse
@@ -39,7 +39,7 @@ class LocationController extends Controller
     /**
      * Получить конкретную локацию.
      *
-     * @param string $id
+     * @param  string $id
      * @return JsonResponse
      */
     public function show(string $id): JsonResponse
@@ -52,8 +52,8 @@ class LocationController extends Controller
     /**
      * Обновить существующую локацию.
      *
-     * @param UpdateLocationRequest $request
-     * @param string $id
+     * @param  UpdateLocationRequest $request
+     * @param  string                $id
      * @return JsonResponse
      */
     public function update(UpdateLocationRequest $request,string $id): JsonResponse
@@ -67,7 +67,7 @@ class LocationController extends Controller
     /**
      * Удалить локацию.
      *
-     * @param string $id
+     * @param  string $id
      * @return JsonResponse
      */
     public function destroy(string $id): JsonResponse

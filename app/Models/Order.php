@@ -19,20 +19,33 @@ class Order extends Model
         'status',
     ];
 
+    /**
+     * @return BelongsToMany<Product>
+     */
     public function products(): belongsToMany
     {
         return $this->belongsToMany(Product::class);
     }
 
+    /**
+     * @return HasMany<OrderProduct>
+     */
     public function orderProduct(): HasMany
     {
         return  $this->hasMany(OrderProduct::class);
     }
+
+    /**
+     * @return BelongsTo<User, Order>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<Location, Order>
+     */
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class);

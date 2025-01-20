@@ -8,7 +8,7 @@ class OrderDTO
         public ?int    $userId = null,
         public ?string $phoneNumber = null,
         public ?int    $locationId = null,
-        public ?string $status = null)
-    {
+        public ?string $status = null
+    ) {
     }
 }

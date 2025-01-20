@@ -12,10 +12,11 @@ class AdminMiddleware
     /**
      * Проверка, что входящий запрос выполнил Админ
      *
-     * @param \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response) $next
+     * @param Closure(Request): (Response) $next
      */
     public function handle(Request $request, Closure $next): Response
     {
+
         if (auth()->check() && auth()->user()->is_admin) {
             return $next($request);
         }

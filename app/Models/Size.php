@@ -14,6 +14,9 @@ class Size extends Model
 
     use HasFactory;
 
+    /**
+     * @return HasMany<CategorySizePrice>
+     */
     public function categorySizePrices(): HasMany
     {
         return $this->hasMany(CategorySizePrice::class);

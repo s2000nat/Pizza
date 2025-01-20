@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\DTO\MenuItemDTO;
 use App\Models\MenuItem;
+use Illuminate\Database\Eloquent\Collection;
 
 class MenuItemService
 {
@@ -12,7 +13,10 @@ class MenuItemService
         return MenuItem::with(['priceCategory', 'categorySizePrices.size'])->findOrFail($id);
     }
 
-    public function getAllMenuItems(): array|\Illuminate\Database\Eloquent\Collection
+    /**
+     * @return Collection<int, MenuItem>
+     */
+    public function getAllMenuItems(): Collection
     {
         return MenuItem::with(['priceCategory', 'categorySizePrices.size'])->get();
     }
@@ -20,11 +24,13 @@ class MenuItemService
     public function createMenuItem(MenuItemDTO $menuItemDTO): MenuItem
     {
 
-        return MenuItem::create([
+        return MenuItem::create(
+            [
             'name' => $menuItemDTO->name,
             'description' => $menuItemDTO->description,
             'price_category_id' => $menuItemDTO->priceCategoryId,
-        ]);
+            ]
+        );
     }
 
     public function updateMenuItem(string $id, MenuItemDTO $menuItemDTO): MenuItem
@@ -47,11 +53,10 @@ class MenuItemService
 
     public function delete(string $id):void
     {
-       $result = MenuItem::destroy($id);
-       if ($result === 0)
-       {
-           throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-       }
+        $result = MenuItem::destroy($id);
+        if ($result === 0) {
+            throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+        }
     }
 
 }

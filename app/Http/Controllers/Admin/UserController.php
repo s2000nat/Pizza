@@ -28,7 +28,7 @@ class UserController extends Controller
     /**
      * Получить конкретного пользователя по ID.
      *
-     * @param int $id
+     * @param  int $id
      * @return JsonResponse
      */
     public function show(int $id): JsonResponse
@@ -40,7 +40,7 @@ class UserController extends Controller
     /**
      * Создать нового пользователя.
      *
-     * @param StoreUserRequest $request
+     * @param  StoreUserRequest $request
      * @return JsonResponse
      */
     public function store(StoreUserRequest $request): JsonResponse
@@ -56,8 +56,8 @@ class UserController extends Controller
     /**
      * Обновить данные пользователя по ID.
      *
-     * @param UpdateUserRequest $request
-     * @param int $id
+     * @param  UpdateUserRequest $request
+     * @param  int               $id
      * @return JsonResponse
      */
     public function update(UpdateUserRequest $request, int $id): JsonResponse
@@ -70,13 +70,13 @@ class UserController extends Controller
         }
         $user->update($validatedData);
 
-        return response()->json($user,Response::HTTP_OK);
+        return response()->json($user, Response::HTTP_OK);
     }
 
     /**
      * Удалить пользователя по ID.
      *
-     * @param int $id
+     * @param  int $id
      * @return JsonResponse
      */
     public function destroy(int $id): JsonResponse
@@ -84,6 +84,6 @@ class UserController extends Controller
         $user = User::query()->findOrFail($id);
         $user->delete();
 
-        return response()->json("User successfully deleted",Response::HTTP_OK );
+        return response()->json("User successfully deleted", Response::HTTP_OK);
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,21 +46,33 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * @return HasMany<Order>
+     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
     }
 
+    /**
+     * @return HasMany<Cart>
+     */
     public function carts(): HasMany
     {
         return $this->hasMany(Cart::class);
     }
 
+    /**
+     * @return BelongsToMany<Product>
+     */
     public function cartProducts(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'users_products')->withPivot('quantity');
     }
 
+    /**
+     * @return HasMany<Location>
+     */
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class, 'user_id');

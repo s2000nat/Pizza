@@ -22,16 +22,25 @@ class Location extends Model
         'deleted',
     ];
 
+    /**
+     * @return BelongsTo<User, Location>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @return BelongsToMany<Product>
+     */
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'orders_products');
     }
 
+    /**
+     * @return HasMany<Order>
+     */
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, 'location_id');

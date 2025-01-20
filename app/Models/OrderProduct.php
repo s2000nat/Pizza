@@ -18,11 +18,17 @@ class OrderProduct extends Model
         'quantity',
     ];
 
+    /**
+     * @return BelongsTo<Product, OrderProduct>
+     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
 
+    /**
+     * @return BelongsTo<Order, OrderProduct>
+     */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);

@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 
 class OrderController extends Controller
-
 {
     protected CartService $cartService;
     protected OrderService $orderService;
@@ -36,12 +35,14 @@ class OrderController extends Controller
         $cart = $this->cartService->getCartDetails($user);
         $locations = $user->locations()->where('deleted', false)->get();
 
-        return response()->json([
+        return response()->json(
+            [
             'user' => new UserResource($user),
             'locations' => LocationResource::collection($locations),
             'cart' => new CartCollectionResource($cart),
 
-        ])->setStatusCode(Response::HTTP_OK);
+            ]
+        )->setStatusCode(Response::HTTP_OK);
     }
 
 

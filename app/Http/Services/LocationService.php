@@ -10,14 +10,16 @@ class LocationService
 
     public function createLocation(LocationDTO $locationDTO): Location
     {
-        $newLocation = Location::create([
+        $newLocation = Location::create(
+            [
             'city' => $locationDTO->city,
             'street' => $locationDTO->street,
             'house_number' => $locationDTO->house_number,
             'floor' => $locationDTO->floor,
             'apartment' => $locationDTO->apartment,
             'user_id' => $locationDTO->user_id
-        ]);
+            ]
+        );
         return $newLocation;
     }
 

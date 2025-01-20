@@ -17,24 +17,20 @@ class MenuItem extends Model
         'price_category_id',
     ];
 
+    /**
+     * @return BelongsTo<PriceCategory, MenuItem>
+     */
     public function priceCategory(): BelongsTo
     {
         return $this->belongsTo(PriceCategory::class, 'price_category_id');
     }
 
+    /**
+     * @return HasMany<CategorySizePrice>
+     */
     public function categorySizePrices(): HasMany
     {
         return $this->hasMany(CategorySizePrice::class, 'price_category_id', 'price_category_id');
     }
 
-    public function getPricesWithSizes()
-    {
-        return $this->categorySizePrices->map(function ($categorySizePrice) {
-            return [
-                'Price_category_size_id' => $categorySizePrice->id,
-                'size' => $categorySizePrice->size->slug,
-                'price' => $categorySizePrice->price,
-                ];
-        });
-    }
 }

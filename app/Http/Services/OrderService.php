@@ -10,7 +10,6 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
 
@@ -25,12 +24,14 @@ class OrderService
             throw new InvalidArgumentException('User ID does not match the location user ID.');
         }
 
-        $newOrder = Order::create([
+        $newOrder = Order::create(
+            [
             'user_id' => $order->userId,
             'phone_number' => $order->phoneNumber,
             'location_id' => $order->locationId,
             'status' => $order->status,
-        ]);
+            ]
+        );
 
 
         return $newOrder;
@@ -43,27 +44,41 @@ class OrderService
             return;
         }
         foreach ($carts as $cart) {
-            OrderProduct::query()->create([
+            OrderProduct::query()->create(
+                [
                 'product_id' => $cart->id,
                 'order_id' => $order->id,
-                'quantity' => $cart->pivot->quantity,
-            ]);
+                'quantity' => $cart->pivot->quantity ?? 1,
+                ]
+            );
         }
         $user->carts()->delete();
     }
 
+
+    /**
+     * @param  User $user
+     * @return Collection<int, Order>
+     */
     public function getOrdersDetails(User $user): Collection
     {
-        return $user->orders()->with([
+        return $user->orders()->with(
+            [
             'orderProduct.product.categorySizePrice',
             'orderProduct.product.menuItem'
-        ])->get();
+            ]
+        )->get();
     }
 
+    /**
+     * @return Collection<int, Order>
+     */
     public function getAllOrdersDetails(): Collection
     {
-        return Order::with(['orderProduct.product.categorySizePrice',
+        return Order::with(
+            ['orderProduct.product.categorySizePrice',
             'orderProduct.product.menuItem'
-        ])->get();
+            ]
+        )->get();
     }
 }

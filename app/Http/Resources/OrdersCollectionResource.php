@@ -10,6 +10,10 @@ class OrdersCollectionResource extends ResourceCollection
 
     public $collects = OrderResource::class;
 
+    /**
+     * @param  $request
+     * @return array<string, string>
+     */
     public function toArray($request): array
     {
         return [

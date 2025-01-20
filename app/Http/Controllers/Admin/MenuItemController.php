@@ -19,7 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
 class MenuItemController extends Controller
 {
 
-    public function __construct(protected MenuItemService $menuItemService){}
+    public function __construct(protected MenuItemService $menuItemService)
+    {
+    }
     /**
      * Display a listing of the resource.
      */

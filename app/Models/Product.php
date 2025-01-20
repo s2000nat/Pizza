@@ -17,27 +17,42 @@ class Product extends Model
         'category_size_price_id',
     ];
 
+    /**
+     * @return BelongsTo<CategorySizePrice, Product>
+     */
     public function categorySizePrice(): BelongsTo
     {
         return $this->belongsTo(CategorySizePrice::class, 'category_size_price_id');
     }
 
+    /**
+     * @return BelongsTo<MenuItem, Product>
+     */
     public function menuItem(): BelongsTo
     {
         return $this->belongsTo(MenuItem::class, 'menu_item_id');
     }
 
+    /**
+     * @return BelongsToMany<User>
+     */
     public function CartUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'users_products')
             ->withPivot('quantity');
     }
 
+    /**
+     * @return HasMany<OrderProduct>
+     */
     public function orderProducts(): HasMany
     {
         return $this->hasMany(OrderProduct::class);
     }
 
+    /**
+     * @return BelongsToMany<Order>
+     */
     public function orders(): BelongsToMany
     {
         return $this->belongsToMany(Order::class);

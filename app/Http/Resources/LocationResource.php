@@ -6,8 +6,20 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property int $id
+ * @property string $city
+ * @property string $street
+ * @property string $house_number
+ * @property int $floor
+ * @property int $apartment
+ */
 class LocationResource extends JsonResource
 {
+    /**
+     * @param  Request $request
+     * @return array<string, int|string>
+     */
     public function toArray(Request $request): array
     {
         return [

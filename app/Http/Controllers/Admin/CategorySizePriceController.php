@@ -21,14 +21,16 @@ class CategorySizePriceController extends Controller
     {
         $priceCategorySizes = CategorySizePrice::with(['size', 'priceCategory'])->get();
 
-        $response = $priceCategorySizes->map(function (CategorySizePrice $priceCategorySize) {
-            return [
+        $response = $priceCategorySizes->map(
+            function (CategorySizePrice $priceCategorySize) {
+                return [
                 'id' => $priceCategorySize->id,
                 'size' => $priceCategorySize->size->slug,
                 'price_category' => $priceCategorySize->priceCategory->slug,
                 'price' => $priceCategorySize->price,
-            ];
-        });
+                ];
+            }
+        );
 
         return response()->json($response, Response::HTTP_OK);
     }
@@ -40,9 +42,11 @@ class CategorySizePriceController extends Controller
     {
         $categorySizePrice = CategorySizePrice::query()->create($request->validated());
 
-        return response()->json([
+        return response()->json(
+            [
             'data' => $categorySizePrice,
-        ], Response::HTTP_CREATED);
+            ], Response::HTTP_CREATED
+        );
 
     }
 
@@ -53,16 +57,18 @@ class CategorySizePriceController extends Controller
     {
         $categorySizePrice = CategorySizePrice::with(['size', 'priceCategory'])->findOrFail($id);
 
-        return response()->json([
+        return response()->json(
+            [
             'id' => $categorySizePrice->id,
             'size' => $categorySizePrice->size->slug,
             'price_category' => $categorySizePrice->priceCategory->slug,
             'price' => $categorySizePrice->price,
-        ], Response::HTTP_OK);
+            ], Response::HTTP_OK
+        );
     }
 
     /**
- * Update the specified resource in storage.
+     * Update the specified resource in storage.
      */
     public function update(UpdateCategorySizePriceRequest $request, string $id): JsonResponse
     {
@@ -79,14 +85,16 @@ class CategorySizePriceController extends Controller
     {
         $categorySizePrice = CategorySizePrice::query()->find($id);
         if (!$categorySizePrice) {
-           throw new NotFoundHttpException();
+            throw new NotFoundHttpException();
         }
 
         $categorySizePrice->delete();
 
-        return response()->json([
+        return response()->json(
+            [
             'message' => 'CategorySizePrice deleted successfully',
-        ], Response::HTTP_OK);
+            ], Response::HTTP_OK
+        );
 
     }
 }
