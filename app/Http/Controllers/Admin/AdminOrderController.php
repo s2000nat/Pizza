@@ -19,8 +19,6 @@ class AdminOrderController extends Controller
     }
 
     /**
-     * Получить список всех заказов.
-     *
      * @return JsonResponse
      */
     public function index(): JsonResponse
@@ -31,8 +29,6 @@ class AdminOrderController extends Controller
     }
 
     /**
-     * Создать новый заказ.
-     *
      * @param  StoreOrderRequest $request
      * @return JsonResponse
      */
@@ -43,8 +39,6 @@ class AdminOrderController extends Controller
     }
 
     /**
-     * Получить конкретный заказ по ID.
-     *
      * @param  string $id
      * @return JsonResponse
      */
@@ -60,8 +54,6 @@ class AdminOrderController extends Controller
     }
 
     /**
-     * Обновить заказ по ID.
-     *
      * @param  UpdateOrderRequest $request
      * @param  string             $id
      * @return JsonResponse
@@ -74,8 +66,6 @@ class AdminOrderController extends Controller
     }
 
     /**
-     * Удалить заказ по ID.
-     *
      * @param  string $id
      * @return JsonResponse
      */

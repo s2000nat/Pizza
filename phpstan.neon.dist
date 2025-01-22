@@ -6,14 +6,6 @@ parameters:
 
     paths:
         - app
-#        - database
-#        - tests
 
     # Level 10 is the highest level
     level: 7
-
-#    ignoreErrors:
-#        - '#PHPDoc tag @var#'
-#
-#    excludePaths:
-#        - ./*/*/FileToBeExcluded.php
