@@ -1,0 +1,267 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My swager Doc",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api",
+            "description": "Development Server"
+        }
+    ],
+    "paths": {
+        "/menu-items": {
+            "get": {
+                "tags": [
+                    "Menu Items"
+                ],
+                "summary": "Get a list of Menu Items",
+                "operationId": "025efdbe4aa087592f0e74d49043f27c",
+                "responses": {
+                    "200": {
+                        "description": "A list of Menu Items",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "menuItems": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Something tasty"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Some description"
+                                                    },
+                                                    "price_category": {
+                                                        "type": "string",
+                                                        "example": "Some price category"
+                                                    },
+                                                    "prices_with_sizes": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "price_category_size_id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "size": {
+                                                                    "type": "string",
+                                                                    "example": "Something tasty"
+                                                                },
+                                                                "price": {
+                                                                    "type": "integer",
+                                                                    "example": 599
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/menu-items": {
+            "post": {
+                "tags": [
+                    "Menu Items"
+                ],
+                "summary": "ADMIN Store Menu Item",
+                "operationId": "b515db51f2281d7ec32733e8030687ae",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "required": [
+                                            "name",
+                                            "id"
+                                        ],
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Something tasty"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Some description"
+                                            },
+                                            "price_category_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created Menu Item",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Something tasty"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Some description"
+                                        },
+                                        "price_category": {
+                                            "type": "string",
+                                            "example": "Some price category"
+                                        },
+                                        "prices_with_sizes": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "price_category_size_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "size": {
+                                                        "type": "string",
+                                                        "example": "Something tasty"
+                                                    },
+                                                    "price": {
+                                                        "type": "integer",
+                                                        "example": 599
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/price-categories": {
+            "get": {
+                "tags": [
+                    "Price Categories"
+                ],
+                "summary": "Get a list of price categories",
+                "operationId": "739cb62dcf70ec7800d93a173d45d7e2",
+                "responses": {
+                    "200": {
+                        "description": "A list of price categories",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "slug": {
+                                                "type": "string",
+                                                "example": "Some price category"
+                                            },
+                                            "created_at": {
+                                                "description": "ISO 8601 Date-Time",
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-01-14T17:16:28.000000Z"
+                                            },
+                                            "updated_at": {
+                                                "description": "ISO 8601 Date-Time",
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-01-14T17:16:28.000000Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Enter your bearer token in the following format: `Bearer {token}`",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Menu Items",
+            "description": "Menu Items"
+        },
+        {
+            "name": "Price Categories",
+            "description": "Price Categories"
+        }
+    ]
+}
