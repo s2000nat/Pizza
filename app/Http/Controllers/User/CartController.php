@@ -69,7 +69,7 @@ class CartController extends Controller
         }
 
         return response()->json(
-            ['message' => 'Продукт удален успешно из корзины.'],
+            ['message' => 'Product deleted from cart successfully.'],
             Response::HTTP_OK,
             [], JSON_UNESCAPED_UNICODE
         );
