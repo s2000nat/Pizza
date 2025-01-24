@@ -42,26 +42,26 @@ Backend для сайта пиццерии на Laravel.
 ```bash
   php artisan key:generate
 ```
-
-7. Зайдите в консоль контейнера php-cli:
+7. Скопирйте пароль для пользователя из docker-compose файла
+8. Зайдите в консоль контейнера php-cli:
 
 ```bash
   make cli bash
 ```
-8. Запустите миграции и сидеры:
+9. Запустите миграции и сидеры:
 ```bash
   php artisan migrate --seed
 ``` 
-9. Запустите тесты:
+10. Запустите тесты:
 ```bash
   php artisan test
 ```
-10. Создать пользователя с правами администратора:
+11. Создать пользователя с правами администратора:
 
 ```bash
   php artisan create:superuser {name} {phone_number} {password}
 ```
-11. Генерация документации Swagger OpenApi:
+12. Генерация документации Swagger OpenApi:
 ```bash
   php artisan "l5-swager:generate"
 ```
