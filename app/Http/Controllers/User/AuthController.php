@@ -18,7 +18,7 @@ class AuthController extends Controller
     {
         $user = User::query()->create($request->validated());
 
-        return response()->json(['message' => "{$user['name']}, регистрация прошла успешно"], Response::HTTP_CREATED);
+        return response()->json(['message' => "{$user['name']}, registration complete."], Response::HTTP_CREATED);
     }
 
     public function login(LoginRequest $request): JsonResponse

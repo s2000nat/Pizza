@@ -11,6 +11,350 @@
         }
     ],
     "paths": {
+        "/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register",
+                "operationId": "66fbe9538317e2bf92b72cfd76cd92dd",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "required": [
+                                            "name",
+                                            "password",
+                                            "phone_number"
+                                        ],
+                                        "properties": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Jhon"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "example@mail.ru"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "Qwerty"
+                                            },
+                                            "phone_number": {
+                                                "type": "string",
+                                                "example": "88005553535"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "registered",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "example": "Jhon, registration complete."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "operationId": "a13b421bcf9c9fb2a9b889f51bc4b856",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "required": [
+                                            "phone_number",
+                                            "password"
+                                        ],
+                                        "properties": {
+                                            "phone_number": {
+                                                "type": "string",
+                                                "example": "88005553535"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "Qwerty"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "example": "3|5MhZkbe6xQXLQOSTJvwx24iZmywEuRxj5NGtkLRf610dc000"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "operationId": "c113d3591f8a6a01014e7099ceb7d0db",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "example": "Successfully logged out"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Get a list of products in cart",
+                "operationId": "0b589ed6c96d2b264e822c253c65ef5c",
+                "responses": {
+                    "200": {
+                        "description": "list of products in cart",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "products": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "product_name": {
+                                                        "type": "string",
+                                                        "example": "Something tasty"
+                                                    },
+                                                    "size": {
+                                                        "type": "string",
+                                                        "example": "Some size"
+                                                    },
+                                                    "price": {
+                                                        "type": "integer",
+                                                        "example": 599
+                                                    },
+                                                    "quantity": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "total_price": {
+                                            "type": "integer",
+                                            "example": 1000
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Store item in cart",
+                "operationId": "474675f30a0f8bad7cbb8926f51760fa",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "required": [
+                                            "menu_item_id",
+                                            "category_size_price_id"
+                                        ],
+                                        "properties": {
+                                            "menu_item_id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "category_size_price_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "list of products in cart",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "products": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "product_name": {
+                                                        "type": "string",
+                                                        "example": "Something tasty"
+                                                    },
+                                                    "size": {
+                                                        "type": "string",
+                                                        "example": "Some size"
+                                                    },
+                                                    "price": {
+                                                        "type": "integer",
+                                                        "example": 599
+                                                    },
+                                                    "quantity": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "total_price": {
+                                            "type": "integer",
+                                            "example": 1000
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/cart/{product}": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Delete Item from cart",
+                "operationId": "e9bca492046defb09bffafc401774e6f",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "description": "product id",
+                        "required": true,
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item from cart deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "example": "Product deleted from cart successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Not Found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/menu-items": {
             "get": {
                 "tags": [
@@ -81,7 +425,7 @@
         "/admin/menu-items": {
             "post": {
                 "tags": [
-                    "Menu Items"
+                    "Admin Menu Items"
                 ],
                 "summary": "ADMIN Store Menu Item",
                 "operationId": "b515db51f2281d7ec32733e8030687ae",
@@ -173,45 +517,930 @@
                 ]
             }
         },
-        "/admin/price-categories": {
+        "/menu-items/{menu-item}": {
             "get": {
                 "tags": [
-                    "Price Categories"
+                    "Menu Items"
                 ],
-                "summary": "Get a list of price categories",
-                "operationId": "739cb62dcf70ec7800d93a173d45d7e2",
+                "summary": "Get one of Menu Items",
+                "operationId": "a59ef94ee4c66e048063f4dc71740645",
+                "parameters": [
+                    {
+                        "name": "menu-item",
+                        "in": "path",
+                        "description": "Menu item id",
+                        "required": true,
+                        "example": 1
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "A list of price categories",
+                        "description": "Menu Item",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "array",
-                                    "items": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Something tasty"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Some description"
+                                        },
+                                        "price_category": {
+                                            "type": "string",
+                                            "example": "Some price category"
+                                        },
+                                        "prices_with_sizes": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "price_category_size_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "size": {
+                                                        "type": "string",
+                                                        "example": "Something tasty"
+                                                    },
+                                                    "price": {
+                                                        "type": "integer",
+                                                        "example": 599
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Menu Items"
+                ],
+                "summary": "ADMIN Update one of Menu Items",
+                "operationId": "e477c8b4f5b57290f87066d051b82057",
+                "parameters": [
+                    {
+                        "name": "menu-item",
+                        "in": "path",
+                        "description": "Menu item id",
+                        "required": true,
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
                                         "properties": {
-                                            "id": {
+                                            "name": {
+                                                "type": "string",
+                                                "example": "Something tasty"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Some description"
+                                            },
+                                            "price_category_id": {
                                                 "type": "integer",
                                                 "example": 1
-                                            },
-                                            "slug": {
-                                                "type": "string",
-                                                "example": "Some price category"
-                                            },
-                                            "created_at": {
-                                                "description": "ISO 8601 Date-Time",
-                                                "type": "string",
-                                                "format": "date-time",
-                                                "example": "2025-01-14T17:16:28.000000Z"
-                                            },
-                                            "updated_at": {
-                                                "description": "ISO 8601 Date-Time",
-                                                "type": "string",
-                                                "format": "date-time",
-                                                "example": "2025-01-14T17:16:28.000000Z"
                                             }
                                         },
                                         "type": "object"
                                     }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Menu Item",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Something tasty"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Some description"
+                                        },
+                                        "price_category": {
+                                            "type": "string",
+                                            "example": "Some price category"
+                                        },
+                                        "prices_with_sizes": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "price_category_size_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "size": {
+                                                        "type": "string",
+                                                        "example": "Something tasty"
+                                                    },
+                                                    "price": {
+                                                        "type": "integer",
+                                                        "example": 599
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Not Found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Menu Items"
+                ],
+                "summary": "ADMIN Delete Menu Item",
+                "operationId": "302c3475587bd04910ab725ef21862ad",
+                "parameters": [
+                    {
+                        "name": "menu-item",
+                        "in": "path",
+                        "description": "Menu item id",
+                        "required": true,
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Menu Item deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "example": "CategorySizePrice deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Not Found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get prepared info about order",
+                "operationId": "5f18eef3bb3eb0fdb460a5a9ad6348f4",
+                "responses": {
+                    "200": {
+                        "description": "prepare order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Jhon"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "jhon@mail.ru"
+                                                },
+                                                "phone_number": {
+                                                    "type": "string",
+                                                    "example": "89617756027"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "locations": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "New York"
+                                                    },
+                                                    "street": {
+                                                        "type": "string",
+                                                        "example": "Lenina"
+                                                    },
+                                                    "house_number": {
+                                                        "type": "string",
+                                                        "example": "25b"
+                                                    },
+                                                    "floor": {
+                                                        "type": "integer",
+                                                        "example": 15
+                                                    },
+                                                    "apartment": {
+                                                        "type": "integer",
+                                                        "example": 151
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "cart": {
+                                            "properties": {
+                                                "products": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "product_name": {
+                                                                "type": "string",
+                                                                "example": "Something tasty"
+                                                            },
+                                                            "size": {
+                                                                "type": "string",
+                                                                "example": "Some size"
+                                                            },
+                                                            "price": {
+                                                                "type": "integer",
+                                                                "example": 599
+                                                            },
+                                                            "quantity": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "total_price": {
+                                                    "type": "integer",
+                                                    "example": 1000
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Create order",
+                "operationId": "c25ee7942d4fda0a787e13dd69e5bb90",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "required": [
+                                            "phone_number",
+                                            "location_id"
+                                        ],
+                                        "properties": {
+                                            "phone_number": {
+                                                "type": "string",
+                                                "example": "89617756027"
+                                            },
+                                            "location_id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Order created successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Empty cart",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Your cart is empty.."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/own-orders": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Get all own orders",
+                "operationId": "96f5e3cb52f9b5fb835acdc2039f5364",
+                "responses": {
+                    "200": {
+                        "description": "prepare order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "orders": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "user": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Jhon"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "jhon@mail.ru"
+                                                            },
+                                                            "phone_number": {
+                                                                "type": "string",
+                                                                "example": "89617756027"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "example": "2025-01-23 21:20:45"
+                                                    },
+                                                    "locations": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "city": {
+                                                                "type": "string",
+                                                                "example": "New York"
+                                                            },
+                                                            "street": {
+                                                                "type": "string",
+                                                                "example": "Lenina"
+                                                            },
+                                                            "house_number": {
+                                                                "type": "string",
+                                                                "example": "25b"
+                                                            },
+                                                            "floor": {
+                                                                "type": "integer",
+                                                                "example": 15
+                                                            },
+                                                            "apartment": {
+                                                                "type": "integer",
+                                                                "example": 151
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "pending"
+                                                    },
+                                                    "products": {
+                                                        "properties": {
+                                                            "total_price": {
+                                                                "type": "integer",
+                                                                "example": 1000
+                                                            }
+                                                        },
+                                                        "type": "array",
+                                                        "items": {
+                                                            "properties": {
+                                                                "id": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                },
+                                                                "product_name": {
+                                                                    "type": "string",
+                                                                    "example": "Something tasty"
+                                                                },
+                                                                "size": {
+                                                                    "type": "string",
+                                                                    "example": "Some size"
+                                                                },
+                                                                "price": {
+                                                                    "type": "integer",
+                                                                    "example": 599
+                                                                },
+                                                                "quantity": {
+                                                                    "type": "integer",
+                                                                    "example": 1
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        }
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/profile": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get info about own profile",
+                "operationId": "267ab80ac2c6b3799a49d89a30cb6363",
+                "responses": {
+                    "200": {
+                        "description": "prepare order",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Jhon"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "jhon@mail.ru"
+                                                },
+                                                "phone_number": {
+                                                    "type": "string",
+                                                    "example": "89617756027"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "locations": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "New York"
+                                                    },
+                                                    "street": {
+                                                        "type": "string",
+                                                        "example": "Lenina"
+                                                    },
+                                                    "house_number": {
+                                                        "type": "string",
+                                                        "example": "25b"
+                                                    },
+                                                    "floor": {
+                                                        "type": "integer",
+                                                        "example": 15
+                                                    },
+                                                    "apartment": {
+                                                        "type": "integer",
+                                                        "example": 151
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/profile/location": {
+            "post": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get info about own profile",
+                "operationId": "49bb60d4f6b3aca210e68e59041fd9c9",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "required": [
+                                            "city",
+                                            "street",
+                                            "house_number"
+                                        ],
+                                        "properties": {
+                                            "city": {
+                                                "type": "string",
+                                                "example": "New York"
+                                            },
+                                            "street": {
+                                                "type": "string",
+                                                "example": "Lenina"
+                                            },
+                                            "house_number": {
+                                                "type": "string",
+                                                "example": "25b"
+                                            },
+                                            "floor": {
+                                                "type": "integer",
+                                                "example": 15
+                                            },
+                                            "apartment": {
+                                                "type": "integer",
+                                                "example": 151
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "city": {
+                                            "type": "string",
+                                            "example": "New York"
+                                        },
+                                        "street": {
+                                            "type": "string",
+                                            "example": "Lenina"
+                                        },
+                                        "house_number": {
+                                            "type": "string",
+                                            "example": "25b"
+                                        },
+                                        "floor": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "apartment": {
+                                            "type": "integer",
+                                            "example": 151
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/profile/location/{location}": {
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get info about own profile",
+                "operationId": "b899806311a7b59c08e9eddaf30f24d3",
+                "parameters": [
+                    {
+                        "name": "location",
+                        "in": "path",
+                        "description": "location id",
+                        "required": true,
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "properties": {
+                                            "city": {
+                                                "type": "string",
+                                                "example": "New York"
+                                            },
+                                            "street": {
+                                                "type": "string",
+                                                "example": "Lenina"
+                                            },
+                                            "house_number": {
+                                                "type": "string",
+                                                "example": "25b"
+                                            },
+                                            "floor": {
+                                                "type": "integer",
+                                                "example": 15
+                                            },
+                                            "apartment": {
+                                                "type": "integer",
+                                                "example": 151
+                                            },
+                                            "deleted": {
+                                                "type": "boolean",
+                                                "example": false
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "city": {
+                                            "type": "string",
+                                            "example": "New York"
+                                        },
+                                        "street": {
+                                            "type": "string",
+                                            "example": "Lenina"
+                                        },
+                                        "house_number": {
+                                            "type": "string",
+                                            "example": "25b"
+                                        },
+                                        "floor": {
+                                            "type": "integer",
+                                            "example": 15
+                                        },
+                                        "apartment": {
+                                            "type": "integer",
+                                            "example": 151
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Not Found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "if location was deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "example": "Ooops! Looks like something went wrong."
+                                        },
+                                        "message": {
+                                            "example": "Forbiden"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
@@ -256,12 +1485,28 @@
     },
     "tags": [
         {
+            "name": "Auth",
+            "description": "Registration, Login, Logout"
+        },
+        {
+            "name": "Profile",
+            "description": "Operations related to profile."
+        },
+        {
+            "name": "Cart",
+            "description": "Cart"
+        },
+        {
             "name": "Menu Items",
             "description": "Menu Items"
         },
         {
-            "name": "Price Categories",
-            "description": "Price Categories"
+            "name": "Admin Menu Items",
+            "description": "Admin Menu Items"
+        },
+        {
+            "name": "Orders",
+            "description": "Orders"
         }
     ]
 }

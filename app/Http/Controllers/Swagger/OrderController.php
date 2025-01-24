@@ -38,7 +38,7 @@ use App\Http\Controllers\Controller;
  *                 @OA\Property(property="apartment", type="integer", example=151)
  *             )),
  *             @OA\Property (property="cart", type="object",
- *                  @OA\Property (property="locations", type="array", @OA\Items(
+ *                  @OA\Property (property="products", type="array", @OA\Items(
  *                      @OA\Property(property="id", type="integer", example=1),
  *                      @OA\Property(property="product_name", type="string", example="Something tasty"),
  *                      @OA\Property(property="size", type="string", example="Some size"),

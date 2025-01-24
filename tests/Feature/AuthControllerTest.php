@@ -28,7 +28,7 @@ class AuthControllerTest extends TestCase
         $response = $this->postJson('/api/register', $data);
 
         $response->assertStatus(Response::HTTP_CREATED);
-        $response->assertJson(['message' => 'Test User, регистрация прошла успешно']);
+        $response->assertJson(['message' => 'Test User, registration complete.']);
     }
 
     /**
